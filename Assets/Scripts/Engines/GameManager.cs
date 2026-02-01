@@ -71,7 +71,11 @@ public class GameManager : MonoBehaviour
         _berserk.BerserkEnd -= endHandler;
     }
 
-    private void 
+    public void UpdatePlayerHealth(int damage)
+    {
+        int adjustedDamage = (int)(damage * _damageFactor);
+        _player.health.UpdateHealth(-adjustedDamage);
+    }
 
     private void OnBerserk_Start(float berserkDuration, float damageIncrease, float moveSpeedIncrease, float jumpForceIncrease)
     {

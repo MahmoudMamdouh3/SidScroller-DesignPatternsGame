@@ -7,7 +7,7 @@ public class Monster : MonoBehaviour
     #endregion
 
     [SerializeField] private GameObject followTarget;
-    public float damage = 20;
+    public int damage = 20;
     public HealthStatus health;
 
     private GameManager _gameMgr;
