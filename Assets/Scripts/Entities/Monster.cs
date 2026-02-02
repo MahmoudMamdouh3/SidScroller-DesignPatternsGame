@@ -4,24 +4,43 @@ public class Monster : MonoBehaviour
 {
     #region Constants
     private float hitDelay = 2.0f;
+    private float speedReachTime = 1.0f;
     #endregion
 
     [SerializeField] private GameObject followTarget;
     public int damage = 20;
+    [SerializeField] private float moveSpeed = 4.0f;
     public HealthStatus health;
 
+    private Rigidbody2D _rigidBody;
     private GameManager _gameMgr;
     private bool _playerCollision = false;
     private float _hitDelayTime;
 
     void Start()
     {
+        _rigidBody = GetComponent<Rigidbody2D>();
         _gameMgr = GameManager.Instance;
     }
 
     void FixedUpdate()
     {
-        Hit(Time.fixedDeltaTime);
+        float deltaTime = Time.fixedDeltaTime;
+
+        Hit(deltaTime);
+        Follow(deltaTime);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+            _playerCollision = true;
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+            _playerCollision = false;
     }
 
     void Hit(float deltaTime)
@@ -36,5 +55,22 @@ public class Monster : MonoBehaviour
         _hitDelayTime = 0;
 
         _gameMgr.UpdatePlayerHealth(damage);
+    }
+
+    void Follow(float deltaTime)
+    {
+        if (followTarget == null || _rigidBody == null)
+            return;
+        
+        bool forward = followTarget.transform.position.x >= transform.position.x;
+
+        if (
+            (forward && _rigidBody.linearVelocityX >= moveSpeed)
+            || (!forward && _rigidBody.linearVelocityX <= -moveSpeed)
+            )
+            return;
+        
+        Debug.Log("Linear Velocity X: " + _rigidBody.linearVelocityX + " - " + ((deltaTime / speedReachTime) * moveSpeed));
+        _rigidBody.linearVelocityX += (deltaTime / speedReachTime) * (forward ? moveSpeed : -moveSpeed);
     }
 }

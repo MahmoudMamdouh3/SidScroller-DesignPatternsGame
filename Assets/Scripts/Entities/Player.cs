@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     #region Constants
-    private const float jumpDelayDuration = 0.2f;
+    private const float jumpDelayDuration = 0.5f;
     #endregion
 
     public float moveSpeed = 5.0f;
@@ -75,6 +75,8 @@ public class Player : MonoBehaviour
     private void LoadComponents()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+        _jumpDelay = jumpDelayDuration;
+
         health.Death += OnDeath;
     }
 
@@ -101,7 +103,12 @@ public class Player : MonoBehaviour
     void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
             _groundCollision = false;
+            _jumpDelay = jumpDelayDuration;
+
+            Debug.Log("Ground exit: " + _jumpDelay);
+        }
     }
 
     private void OnMove_Complete(InputAction.CallbackContext context)
@@ -173,13 +180,22 @@ public class Player : MonoBehaviour
         _jumpDelay += deltaTime;
         
         if (!_jumpPress
-            || !_groundCollision
             || _jumpDelay < jumpDelayDuration)
             return;
         
+        if (!Jump())
+            return;
+
         _jumpDelay = 0;
-        
+    }
+
+    private bool Jump()
+    {
+        if (!_groundCollision)
+            return false;
+
         _rigidBody.AddForceY(jumpForce * _jumpForceFactor, ForceMode2D.Impulse);
+        return true;
     }
 
     private void HandleAttack(float deltaTime)
@@ -213,13 +229,15 @@ public class Player : MonoBehaviour
         Spear spear = spearObject.GetComponent<Spear>();
         if (spear == null)
             return;
+
+        attackPower *= _moveSpeedFactor;
         
+        // Throw power
         spear.powerForce.x += attackPower;
         spear.powerForce.y += attackPower * 0.2f;
 
+        // Throw direction
         spear.powerForce.x *= _forward ? 1 : -1;
-
-        Debug.Log("Attack power time: " + attackPower.ToString());
 
         spear.Attack();
     }
