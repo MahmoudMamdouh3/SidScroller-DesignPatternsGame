@@ -34,7 +34,10 @@ public class Monster : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player"))
+        {
             _playerCollision = true;
+            _hitDelayTime = hitDelay;
+        }
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -43,7 +46,7 @@ public class Monster : MonoBehaviour
             _playerCollision = false;
     }
 
-    void Hit(float deltaTime)
+    private void Hit(float deltaTime)
     {
         if (!_playerCollision)
             return;
@@ -57,7 +60,7 @@ public class Monster : MonoBehaviour
         _gameMgr.UpdatePlayerHealth(damage);
     }
 
-    void Follow(float deltaTime)
+    private void Follow(float deltaTime)
     {
         if (followTarget == null || _rigidBody == null)
             return;
@@ -70,7 +73,6 @@ public class Monster : MonoBehaviour
             )
             return;
         
-        Debug.Log("Linear Velocity X: " + _rigidBody.linearVelocityX + " - " + ((deltaTime / speedReachTime) * moveSpeed));
-        _rigidBody.linearVelocityX += (deltaTime / speedReachTime) * (forward ? moveSpeed : -moveSpeed);
+        _rigidBody.linearVelocityX += (forward ? moveSpeed : -moveSpeed) * (deltaTime / speedReachTime);
     }
 }

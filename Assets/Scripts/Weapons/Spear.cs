@@ -4,6 +4,8 @@ using UnityEngine;
 public class Spear : MonoBehaviour
 {
     #region Constants
+    private const float defaultRotation = 75.0f;
+    private const float groundRotation = 90.0f;
     private const float despawnDelay = 2.0f;
     public static readonly Vector3 spawnPaddingForward = new Vector3(1.24591f, 0.676f, 0);
     public static readonly Vector3 spawnPaddingBackward = new Vector3(-1.25609f, 0.676f, 0);
@@ -33,6 +35,7 @@ public class Spear : MonoBehaviour
 
     void FixedUpdate()
     {
+        Rotate();
         Despawn();
     }
     
@@ -40,13 +43,40 @@ public class Spear : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
             _groundCollision = true;
+
+            /*_rigidBody.angularVelocity = 0f;
+            _rigidBody.rotation = groundRotation;
+            _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;*/
+        }
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             _groundCollision = false;
+    }
+
+    private void Rotate()
+    {
+        if (_rigidBody.linearVelocity.sqrMagnitude <= 0.01f)
+            return;
+        
+        if (!_groundCollision)
+        {
+            float rotationDiff = _rigidBody.rotation % 90;
+            if (rotationDiff >= 0 && rotationDiff <= 4)
+            {
+                _rigidBody.angularVelocity = 0f;
+                _rigidBody.rotation = groundRotation;
+            }
+            return;
+        }
+        
+        Debug.Log("Rotatingggg");
+        float angle = Mathf.Atan2(_rigidBody.linearVelocity.y, _rigidBody.linearVelocity.x) * Mathf.Rad2Deg;
+        _rigidBody.rotation = angle + defaultRotation;
     }
 
     private void Despawn()

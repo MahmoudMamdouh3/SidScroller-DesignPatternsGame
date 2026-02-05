@@ -10,9 +10,9 @@ public class HealthStatus : IDamageable
     public int maxHealth;
     [HideInInspector] public event DeathEvent Death;
 
-    public void UpdateHealth(int health)
+    public void UpdateHealth(int healthValue)
     {
-        health -= Math.Clamp(health + health, 0, maxHealth);
+        health = Math.Clamp(health + healthValue, 0, maxHealth);
         
         if (health == 0)
             Death?.Invoke();

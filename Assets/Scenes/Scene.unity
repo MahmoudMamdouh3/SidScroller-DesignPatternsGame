@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c579128e7599e1b41a6c049751645963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  _player: {fileID: 0}
+  _player: {fileID: 1099001337}
   berserkIncreaseLuckRate: 10
 --- !u!1 &1097996012
 GameObject:
@@ -302,6 +302,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 80278377534981750, guid: 7bde5ce3cc179d0409a1983e256016f4, type: 3}
   m_PrefabInstance: {fileID: 1822824456063666279}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1099001337 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7523172991187529602, guid: 7bde5ce3cc179d0409a1983e256016f4, type: 3}
+  m_PrefabInstance: {fileID: 1822824456063666279}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099001331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a1ff015747792449600cadd0d472ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1355931946
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   followTarget: {fileID: 1099001331}
   damage: 20
-  moveSpeed: 10
+  moveSpeed: 5
   health:
     health: 100
     maxHealth: 100
@@ -1063,7 +1074,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1914275469149180938, guid: e4845a0b0f5c0ee4c8a34490286a3e41, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3227797354328735262, guid: e4845a0b0f5c0ee4c8a34490286a3e41, type: 3}
+      propertyPath: m_Constraints
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3227797354328735262, guid: e4845a0b0f5c0ee4c8a34490286a3e41, type: 3}
+      propertyPath: m_GravityScale
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4189575958670603484, guid: e4845a0b0f5c0ee4c8a34490286a3e41, type: 3}
       propertyPath: m_LocalPosition.x

@@ -105,9 +105,7 @@ public class Player : MonoBehaviour
         if (collision.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             _groundCollision = false;
-            _jumpDelay = jumpDelayDuration;
-
-            Debug.Log("Ground exit: " + _jumpDelay);
+            //_jumpDelay = jumpDelayDuration;
         }
     }
 
